@@ -1,17 +1,12 @@
 package com.fatec.backendtopicosespeciais.domain;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -22,8 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="evento")
-public class Evento implements Serializable{
+@Table(name="categoria")
+public class Categoria implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,12 +27,5 @@ public class Evento implements Serializable{
 	@Column(name="id")
 	private Long id;
 	private String nome;
-	private String descricao;
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "rel_evento_categoria",
-		joinColumns = { @JoinColumn(name = "id_evento") },
-		inverseJoinColumns = { @JoinColumn(name = "id_categoria") })
-	private List<Categoria> categorias;
 	
 }

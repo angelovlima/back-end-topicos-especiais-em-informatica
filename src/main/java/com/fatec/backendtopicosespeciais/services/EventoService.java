@@ -47,5 +47,10 @@ public class EventoService {
 	public List<Evento> buscarTodos() {
 		return eventoRepository.findAll();
 	}
+	
+	public Evento buscarPorIdNome(Long id, String nome) {
+		Optional<Evento> evento = eventoRepository.buscarPorIdNome(nome, id);
+		return evento.orElseThrow(() -> new ObjectNotFoundException("Evento não encontrado!", null));
+	}
 
 }
