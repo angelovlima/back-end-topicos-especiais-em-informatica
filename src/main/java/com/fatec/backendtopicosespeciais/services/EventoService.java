@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fatec.backendtopicosespeciais.domain.Evento;
 import com.fatec.backendtopicosespeciais.dto.EventoDTO;
@@ -16,16 +17,20 @@ public class EventoService {
 	
 	@Autowired
 	private EventoRepository eventoRepository;
+
+	@Autowired
+	private HistoricoCadastroEventoService historicoCadastroEventoService;
 	
 	public Evento buscarPorId(Long id) {
 		Optional<Evento> evento = eventoRepository.findById(id);
 		return evento.orElseThrow(() -> new ObjectNotFoundException("Evento não encontrado!", null));
 	}
 	
+	@Transactional
 	public Evento inserir(EventoDTO eventoDTO) {
 
 		Evento evento = eventoDTO.toEntityInsert(eventoDTO);
-		
+		historicoCadastroEventoService.inserir(eventoDTO);
 		eventoRepository.save(evento);
 		return evento;
 	}
