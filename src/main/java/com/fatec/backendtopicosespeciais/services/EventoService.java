@@ -49,7 +49,7 @@ public class EventoService {
 	}
 	
 	public Evento buscarPorIdNome(Long id, String nome) {
-		Optional<Evento> evento = eventoRepository.buscarPorIdNome(nome, id);
+		Optional<Evento> evento = eventoRepository.findByNomeAndId(nome, id);
 		return evento.orElseThrow(() -> new ObjectNotFoundException("Evento não encontrado!", null));
 	}
 	

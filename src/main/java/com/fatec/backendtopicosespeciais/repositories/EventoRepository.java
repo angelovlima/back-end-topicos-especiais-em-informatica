@@ -12,8 +12,7 @@ import com.fatec.backendtopicosespeciais.domain.Evento;
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long>{
 
-	@Query("select e from Evento e where e.nome like %?1% and e.id = ?2")
-	public Optional<Evento> buscarPorIdNome(String nome, Long id);
+	public Optional<Evento> findByNomeAndId(String nome, Long id);
 	
 	@Query("select e from Evento e join e.categorias as c where c.nome like %?1%")
 	public Optional<List<Evento>> buscarEventosPorNomeCategoria(String nome);
