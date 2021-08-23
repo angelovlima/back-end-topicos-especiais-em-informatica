@@ -71,4 +71,11 @@ public class EventoResource {
 		Evento evento = eventoService.buscarPorIdNome(id, nome);
 		return ResponseEntity.ok().body(evento);
 	}
+	
+	@ApiOperation(value="Realiza a busca dos eventos pelo nome de uma categoria")
+	@GetMapping("/buscarEventosPorNomeCategoria/{nome}")
+	public ResponseEntity<List<Evento>> buscarEventosPorNomeCategoria(@PathVariable String nome) throws Exception {
+		List<Evento> listaEventos = eventoService.buscarEventosPorNomeCategoria(nome);
+		return ResponseEntity.ok().body(listaEventos);
+	}
 }

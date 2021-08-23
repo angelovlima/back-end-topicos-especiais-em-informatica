@@ -52,5 +52,10 @@ public class EventoService {
 		Optional<Evento> evento = eventoRepository.buscarPorIdNome(nome, id);
 		return evento.orElseThrow(() -> new ObjectNotFoundException("Evento não encontrado!", null));
 	}
+	
+	public List<Evento> buscarEventosPorNomeCategoria(String nomeCategoria) {
+		Optional<List<Evento>> listaEvento = eventoRepository.buscarEventosPorNomeCategoria(nomeCategoria);
+		return listaEvento.orElseThrow(() -> new ObjectNotFoundException("Eventos não encontrados!", null));
+	}
 
 }

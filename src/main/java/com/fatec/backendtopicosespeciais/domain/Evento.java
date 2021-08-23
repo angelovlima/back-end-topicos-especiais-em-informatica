@@ -33,6 +33,9 @@ public class Evento implements Serializable{
 	private Long id;
 	private String nome;
 	private String descricao;
+	private String autor;
+	private String endereco;
+	private boolean ativo;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "rel_evento_categoria",
