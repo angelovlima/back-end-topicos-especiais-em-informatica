@@ -24,7 +24,7 @@ public class CategoriaService {
 	
 	public Categoria inserir(CategoriaDTO categoriaDTO) {
 
-		Categoria categoria = categoriaDTO.toEntityInsert(categoriaDTO);
+		Categoria categoria = categoriaDTO.toEntityInsert();
 		
 		categoriaRepository.save(categoria);
 		return categoria;

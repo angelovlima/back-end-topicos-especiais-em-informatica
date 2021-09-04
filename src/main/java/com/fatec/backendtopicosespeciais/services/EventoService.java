@@ -29,7 +29,7 @@ public class EventoService {
 	@Transactional
 	public Evento inserir(EventoDTO eventoDTO) {
 
-		Evento evento = eventoDTO.toEntityInsert(eventoDTO);
+		Evento evento = eventoDTO.toEntityInsert();
 		historicoCadastroEventoService.inserir(eventoDTO);
 		eventoRepository.save(evento);
 		return evento;

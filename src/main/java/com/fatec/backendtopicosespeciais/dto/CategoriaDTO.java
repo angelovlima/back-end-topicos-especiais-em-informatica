@@ -14,8 +14,8 @@ public class CategoriaDTO {
 	private Long id;
 	private String nome;
 
-	public Categoria toEntityInsert(CategoriaDTO categoriaDTO) {
-		return new Categoria(null, nome);
+	public Categoria toEntityInsert() {
+		return new Categoria(null, this.nome);
 	}
 	
 	public Categoria toEntityUpdate(Categoria categoria) {

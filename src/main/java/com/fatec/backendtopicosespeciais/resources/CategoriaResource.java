@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin()
 @RestController
-@RequestMapping("categoria")
+@RequestMapping("categorias")
 public class CategoriaResource {
 
 	@Autowired

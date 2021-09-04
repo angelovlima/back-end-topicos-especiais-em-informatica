@@ -22,8 +22,8 @@ public class EventoDTO {
 	private boolean ativo;
 	private List<Categoria> categorias;
 
-	public Evento toEntityInsert(EventoDTO eventoDTO) {
-		return new Evento(null, nome, descricao, autor, endereco, ativo, categorias);
+	public Evento toEntityInsert() {
+		return new Evento(null, this.nome, this.descricao, this.autor, this.endereco, this.ativo, this.categorias);
 	}
 	
 	public Evento toEntityUpdate(Evento evento) {
