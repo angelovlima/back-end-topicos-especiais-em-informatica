@@ -8,9 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fatec.backendtopicosespeciais.security.jwt.JwtAuthFilter;
+import com.fatec.backendtopicosespeciais.security.jwt.JwtService;
 import com.fatec.backendtopicosespeciais.services.impl.UsuarioServiceImpl;
 
 @EnableWebSecurity
@@ -18,11 +23,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UsuarioServiceImpl usuarioServiceImpl;
+    @Autowired
+    private JwtService jwtService;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+    @Bean
+    public OncePerRequestFilter jwtFilter(){
+        return new JwtAuthFilter(jwtService, usuarioServiceImpl);
+    }
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -55,7 +67,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 	.hasRole("ADMIN")
         		.antMatchers(HttpMethod.POST, "/usuarios/**")
         			.permitAll()
-        		.anyRequest().authenticated();
+        		.anyRequest().authenticated()
+        	.and()
+        		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        	.and()
+        		.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

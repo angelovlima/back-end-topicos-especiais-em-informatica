@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.fatec.backendtopicosespeciais.domain.Usuario;
 import com.fatec.backendtopicosespeciais.dto.UsuarioDTO;
+import com.fatec.backendtopicosespeciais.exception.SenhaInvalidaException;
 import com.fatec.backendtopicosespeciais.repositories.UsuarioRepository;
 
 @Service
@@ -28,6 +29,17 @@ public class UsuarioServiceImpl implements UserDetailsService {
     	Usuario usuario = usuarioDTO.toEntityInsert();
     	usuario.setSenha(criptografarSenha(usuario.getSenha()));
         return usuarioRepository.save(usuario);
+    }
+    
+    public UserDetails autenticar( Usuario usuario ){
+        UserDetails user = loadUserByUsername(usuario.getNome());
+        boolean senhasIguais = passwordEncoder.matches( usuario.getSenha(), user.getPassword() );
+
+        if(senhasIguais){
+            return user;
+        }
+
+        throw new SenhaInvalidaException();
     }
     
 	@Override
