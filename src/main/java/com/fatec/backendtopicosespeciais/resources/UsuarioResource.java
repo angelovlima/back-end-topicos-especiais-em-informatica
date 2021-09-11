@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fatec.backendtopicosespeciais.domain.Usuario;
 import com.fatec.backendtopicosespeciais.dto.CredencialDTO;
 import com.fatec.backendtopicosespeciais.dto.TokenDTO;
@@ -33,10 +34,11 @@ public class UsuarioResource {
     private JwtService jwtService;
 	
 	@ApiOperation(value="Realiza o cadastro de um usuário")
+	@JsonView(Views.Public.class)
 	@PostMapping("/cadastrar")
 	public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody UsuarioDTO usuarioDTO) throws Exception {
 		usuarioServiceImpl.inserir(usuarioDTO);
-		//Retornar outro DTO sem senha
+		
 		return ResponseEntity.ok(usuarioDTO);
 	}
 	

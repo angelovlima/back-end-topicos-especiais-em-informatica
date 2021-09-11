@@ -14,6 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fatec.backendtopicosespeciais.resources.Views;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,11 +33,17 @@ public class Evento implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
+	@JsonView(Views.Public.class)
 	private Long id;
+	@JsonView(Views.Public.class)
 	private String nome;
+	@JsonView(Views.Public.class)
 	private String descricao;
+	@JsonView(Views.Internal.class)
 	private String autor;
+	@JsonView(Views.Internal.class)
 	private String endereco;
+	@JsonView(Views.Internal.class)
 	private boolean ativo;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
