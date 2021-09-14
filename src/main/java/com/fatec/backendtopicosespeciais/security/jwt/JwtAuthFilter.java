@@ -43,6 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             boolean isValid = jwtService.tokenValido(token);
 
             if(isValid){
+            	//Pegar dados do usuario do token
                 String loginUsuario = jwtService.obterLoginUsuario(token);
                 UserDetails usuario = usuarioService.loadUserByUsername(loginUsuario);
                 UsernamePasswordAuthenticationToken user = new

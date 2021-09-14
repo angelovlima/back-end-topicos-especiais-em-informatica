@@ -45,7 +45,7 @@ public class EventoResource {
 	}
 	
 	@ApiOperation(value="Realiza a edição de um evento")
-	@PutMapping(value = "/editar/{id}")
+	@PutMapping("/editar")
 	public ResponseEntity<EventoDTO> alterar(@RequestBody EventoDTO eventoDTO) throws Exception {
 		eventoService.alterar(eventoDTO);
 		return ResponseEntity.ok(eventoDTO);

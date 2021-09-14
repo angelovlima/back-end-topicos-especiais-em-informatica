@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,7 @@ public class EventoService {
 		eventoRepository.deleteById(id);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	public List<Evento> buscarTodos() {
 		return eventoRepository.findAll();
 	}
