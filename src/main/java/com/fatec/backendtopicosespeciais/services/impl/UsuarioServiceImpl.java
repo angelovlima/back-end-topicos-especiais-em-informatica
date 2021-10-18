@@ -15,6 +15,7 @@ import com.fatec.backendtopicosespeciais.dto.UsuarioDTO;
 import com.fatec.backendtopicosespeciais.exception.SenhaInvalidaException;
 import com.fatec.backendtopicosespeciais.repositories.UsuarioRepository;
 
+//UserDetailsService serve para carregar o usuário através de uma base de dados
 @Service
 public class UsuarioServiceImpl implements UserDetailsService {
 

@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fatec.backendtopicosespeciais.services.impl.UsuarioServiceImpl;
 
-//Intercepta uma requisição e adiciona um usuário autenticado caso o token JWT seja válido dentra da sessão
+//Intercepta uma requisição e adiciona um usuário autenticado caso o token JWT seja válido dentro da sessão
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private JwtService jwtService;
@@ -36,9 +36,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse httpServletResponse,
             FilterChain filterChain) throws ServletException, IOException {
 
+    	//Pega o authorization do Header enviado na requisição 
         String authorization = httpServletRequest.getHeader("Authorization");
 
         if( authorization != null && authorization.startsWith("Bearer")){
+        	//Divide o header authorization através do espaço, pegando assim apenas o token
             String token = authorization.split(" ")[1];
             boolean isValid = jwtService.tokenValido(token);
 

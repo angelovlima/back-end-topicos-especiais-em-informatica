@@ -15,9 +15,13 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+// Pega o usuário autenticado e gera um token utilizando suas informações (sem a senha)
+// Serve para saber quem é o usuário e qual a data de autorização do token
 @Service
 public class JwtService {
 
+	//Define o tempo para que o token expire
+	//Valores pegos de application.properties
 	@Value("${security.jwt.expiracao}")
 	private String expiracao;
 	
@@ -40,11 +44,14 @@ public class JwtService {
 					.compact();
 	}
 	
+	//Claims são as informações do token
     private Claims obterClaims( String token ) throws ExpiredJwtException {
         return Jwts
+        		  //parser() decodifica o token
                  .parser()
-                 //parser() decodifica o token
+                 //Define qual foi a chave utilizada para gerar o token
                  .setSigningKey(chaveAssinatura)
+                 //Passa o token para o objeto
                  .parseClaimsJws(token)
                  .getBody();
     }
@@ -62,6 +69,7 @@ public class JwtService {
         }
     }
     
+    //Traz o usuário que mandou o token
     public String obterLoginUsuario(String token) throws ExpiredJwtException{
         return (String) obterClaims(token).getSubject();
     }
