@@ -22,11 +22,13 @@ public class EventoService {
 	@Autowired
 	private HistoricoCadastroEventoService historicoCadastroEventoService;
 	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public Evento buscarPorId(Long id) {
 		Optional<Evento> evento = eventoRepository.findById(id);
 		return evento.orElseThrow(() -> new ObjectNotFoundException("Evento não encontrado!", null));
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@Transactional
 	public Evento inserir(EventoDTO eventoDTO) {
 
@@ -36,6 +38,7 @@ public class EventoService {
 		return evento;
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	public Evento alterar(EventoDTO eventoDTO) throws Exception {
 		if (eventoDTO.getId() == null) {
 			throw new Exception("Id não encontrado");
@@ -46,23 +49,25 @@ public class EventoService {
 		return evento;
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	public void deletar(Long id) {
 		eventoRepository.deleteById(id);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
-	public List<Evento> buscarTodos() {
-		return eventoRepository.findAll();
-	}
-	
 	public Evento buscarPorIdNome(Long id, String nome) {
 		Optional<Evento> evento = eventoRepository.findByNomeAndId(nome, id);
 		return evento.orElseThrow(() -> new ObjectNotFoundException("Evento não encontrado!", null));
 	}
 	
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public List<Evento> buscarEventosPorNomeCategoria(String nomeCategoria) {
 		Optional<List<Evento>> listaEvento = eventoRepository.buscarEventosPorNomeCategoria(nomeCategoria);
 		return listaEvento.orElseThrow(() -> new ObjectNotFoundException("Eventos não encontrados!", null));
 	}
 
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public List<Evento> buscarTodos() {
+		return eventoRepository.findAll();
+	}
 }
