@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.fatec.backendtopicosespeciais.domain.Usuario;
 import com.fatec.backendtopicosespeciais.dto.UsuarioDTO;
-import com.fatec.backendtopicosespeciais.exception.SenhaInvalidaException;
 import com.fatec.backendtopicosespeciais.repositories.UsuarioRepository;
 
 //UserDetailsService serve para carregar o usuário através de uma base de dados
@@ -30,17 +29,6 @@ public class UsuarioServiceImpl implements UserDetailsService {
     	Usuario usuario = usuarioDTO.toEntityInsert();
     	usuario.setSenha(criptografarSenha(usuario.getSenha()));
         return usuarioRepository.save(usuario);
-    }
-    
-    public UserDetails autenticar( Usuario usuario ){
-        UserDetails user = loadUserByUsername(usuario.getNome());
-        boolean senhasIguais = passwordEncoder.matches( usuario.getSenha(), user.getPassword() );
-
-        if(senhasIguais){
-            return user;
-        }
-
-        throw new SenhaInvalidaException();
     }
     
 	@Override
@@ -62,5 +50,10 @@ public class UsuarioServiceImpl implements UserDetailsService {
 	public String criptografarSenha (String senha){
 		String senhaCriptografada = passwordEncoder.encode(senha);
 		return senhaCriptografada;
+	}
+	
+	public Boolean verificarAutoridadePorNome(String username) {
+		Usuario usuario = usuarioRepository.findByNome(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
+		return usuario.getAdmin();
 	}
 }

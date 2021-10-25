@@ -4,60 +4,35 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
-import com.fatec.backendtopicosespeciais.services.impl.UsuarioServiceImpl;
+public class JwtAuthFilter extends GenericFilterBean {
 
-//Intercepta uma requisição e adiciona um usuário autenticado caso o token JWT seja válido dentro da sessão
-public class JwtAuthFilter extends OncePerRequestFilter {
-
-	private JwtService jwtService;
-	private UsuarioServiceImpl usuarioService;
-	
-	
-	
-	public JwtAuthFilter(JwtService jwtService, UsuarioServiceImpl usuarioService) {
-		this.jwtService = jwtService;
-		this.usuarioService = usuarioService;
-	}
-
-
-
-    @Override
-    protected void doFilterInternal(
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse,
-            FilterChain filterChain) throws ServletException, IOException {
-
-    	//Pega o authorization do Header enviado na requisição 
-        String authorization = httpServletRequest.getHeader("Authorization");
-
-        if( authorization != null && authorization.startsWith("Bearer")){
-        	//Divide o header authorization através do espaço, pegando assim apenas o token
-            String token = authorization.split(" ")[1];
-            boolean isValid = jwtService.tokenValido(token);
-
-            if(isValid){
-            	//Pegar dados do usuario do token
-                String loginUsuario = jwtService.obterLoginUsuario(token);
-                UserDetails usuario = usuarioService.loadUserByUsername(loginUsuario);
-                UsernamePasswordAuthenticationToken user = new
-                        UsernamePasswordAuthenticationToken(usuario,null,
-                        usuario.getAuthorities());
-                user.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(user);
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+        try {
+            HttpServletRequest servletRequest = (HttpServletRequest) request;
+            String authorization = servletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+            if (authorization != null) {
+            	String token = authorization.replaceAll("Bearer ", "");
+                Authentication credentials = JwtService.parseToken(token);
+                SecurityContextHolder.getContext().setAuthentication(credentials);
             }
+            chain.doFilter(request, response);
         }
-
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
-
-    }
+        catch(Throwable t) {
+            HttpServletResponse servletResponse = (HttpServletResponse) response;
+            servletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, t.getMessage());
+        }	
+	}
 	
 }
