@@ -48,7 +48,7 @@ public class UsuarioResource {
     	auth = authManeger.authenticate(auth);
     	usuario.setAdmin(usuarioServiceImpl.verificarAutoridadePorNome(usuario.getNome()));
     	LoginDTO loginDTO = new LoginDTO(usuario.getNome(), null, 
-    			JwtService.gerarToken(usuario));
+    			JwtService.gerarToken(usuario), usuario.getAdmin());
     	return loginDTO;
     }
 

@@ -12,6 +12,14 @@ public class LoginDTO {
 	private String nome;
 	private String senha;
 	private String token;
+	private Boolean admin;
+	
+	public LoginDTO(String nome, String senha, String token) {
+		super();
+		this.nome = nome;
+		this.senha = senha;
+		this.token = token;
+	}
 	
 
 }
